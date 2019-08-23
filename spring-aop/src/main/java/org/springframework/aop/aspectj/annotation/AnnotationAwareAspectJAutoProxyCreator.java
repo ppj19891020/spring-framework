@@ -85,18 +85,29 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 				new BeanFactoryAspectJAdvisorsBuilderAdapter(beanFactory, this.aspectJAdvisorFactory);
 	}
 
-
+	// 找到容器中所有的Spring Advisor beans 和 @AspectJ 注解的 beans，都封装成
+	// Advisor 形式返回一个列表
 	@Override
 	protected List<Advisor> findCandidateAdvisors() {
 		// Add all the Spring advisors found according to superclass rules.
+		// 使用基类Spring Advisor查找机制查找容器中所有的Spring Advisor
+		// 其实就是父类使用所构造的BeanFactoryAdvisorRetrievalHelper从
+		// 容器中获取所有的Spring Advisor beans。
 		List<Advisor> advisors = super.findCandidateAdvisors();
+		// 使用aspectJAdvisorsBuilder从容器中获取所有@AspectJ 注解的bean，并将它们包装成Advisor
 		// Build Advisors for all AspectJ aspects in the bean factory.
 		if (this.aspectJAdvisorsBuilder != null) {
 			advisors.addAll(this.aspectJAdvisorsBuilder.buildAspectJAdvisors());
 		}
+		// 现在列表advisors包含容器中所有的Spring Advisor beans 和 @AspectJ 注解的 beans,
+		// 现在它们都以 Advisor 的形式存在
 		return advisors;
 	}
 
+	// 判断指定的类是否是一个基础设置类:
+	// 1. 如果父类的 isInfrastructureClass 断定它是一个基础设施类，就认为它是;
+	// 2. 如果这是一个@Aspect注解的类，也认为这是一个基础设施类;
+	// 一旦某个bean类被认为是基础设施类，那么将不会对该类实施代理机制
 	@Override
 	protected boolean isInfrastructureClass(Class<?> beanClass) {
 		// Previously we setProxyTargetClass(true) in the constructor, but that has too
@@ -112,6 +123,8 @@ public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorA
 	}
 
 	/**
+	 * 检查给定名称的bean是否是符合条件的Aspect bean。这里是依据属性 includePatterns 做检查的，
+	 * 当 includePatterns 属性为 null 时，总是返回 true。
 	 * Check whether the given aspect bean is eligible for auto-proxying.
 	 * <p>If no &lt;aop:include&gt; elements were used then "includePatterns" will be
 	 * {@code null} and all beans are included. If "includePatterns" is non-null,
