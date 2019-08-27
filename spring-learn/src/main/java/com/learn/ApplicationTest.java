@@ -15,6 +15,10 @@ public class ApplicationTest {
 		CacheService cacheService = context.getBean(CacheService.class);
 		cacheService.getTime("aaa");
 		cacheService.getTime("aaa");
+		String[] beanNames = context.getBeanDefinitionNames();
+		for(String name:beanNames){
+			System.out.println("beanName:"+name);
+		}
 		context.close();
 	}
 }

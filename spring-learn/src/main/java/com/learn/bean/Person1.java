@@ -5,13 +5,13 @@ package com.learn.bean;
  * @date 2019-08-14
  * @Description:
  */
-public class Person {
+public class Person1 {
 
-	public Person() {
+	public Person1() {
 
 	}
 
-	public Person(String name, int age) {
+	public Person1(String name, int age) {
 		this.name = name;
 		this.age = age;
 	}
