@@ -19,6 +19,9 @@ public class ApplicationTest {
 		for(String name:beanNames){
 			System.out.println("beanName:"+name);
 		}
+		//获取工厂bean本身
+		Object testFactoryBean = context.getBean("&testFactoryBean");
+		System.out.println(testFactoryBean.getClass());
 		context.close();
 	}
 }
