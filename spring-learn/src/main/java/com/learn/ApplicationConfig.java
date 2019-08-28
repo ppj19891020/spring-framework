@@ -1,5 +1,6 @@
 package com.learn;
 
+import com.learn.bean.Car;
 import com.learn.bean.Person;
 import com.learn.bean.TestFactoryBean;
 import com.learn.conditional.TestConditions;
@@ -91,5 +92,23 @@ public class ApplicationConfig {
 	@Bean
 	public TestFactoryBean testFactoryBean(){
 		return new TestFactoryBean();
+	}
+
+
+	/**
+	 * bean 的生命周期：bean创建--->初始化---->销毁
+	 * 1. 指定初始化和销毁方法：init-method、init-destory
+	 *	注意：如果scope是prototype，则容器启动的时候不会初始化bean，只有在调用bean的时候才会初始化，但是容器销毁不会执行销毁方法；
+	 * 2. 实现 InitializingBean接口定义初始化逻辑，实现DisposableBean接口实现销毁逻辑
+	 * 3. 使用JSR250 @PostConstruct初始化 @PreDestroy销毁
+	 * 4. 使用beanpostprocess，bean的后置处理器
+	 * 总结顺序
+	 * 初始化顺序：构造函数 -->  BeanPostProcessor postProcessBeforeInitialization --> postconstuct --> InitializingBean ---> init-method  --> BeanPostProcessor postProcessAfterInitialization.
+	 * 销毁顺序：preDestory ---> DisposableBean ---> destory-method
+	 */
+//	@Scope(value = "prototype")
+	@Bean(initMethod = "init",destroyMethod = "destory")
+	public Car car(){
+		return new Car();
 	}
 }
