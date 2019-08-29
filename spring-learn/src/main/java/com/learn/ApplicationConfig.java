@@ -7,6 +7,7 @@ import com.learn.conditional.TestConditions;
 import com.learn.conditional.TestImportBeanDefinitionRegistrar;
 import com.learn.conditional.TestImportSelect;
 import com.learn.services.CacheService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -21,6 +22,8 @@ import java.util.Arrays;
  * @date 2019-08-14
  * @Description:
  */
+
+@PropertySource(value = {"classpath:/test.properties"})
 //spring 缓存配置
 @EnableCaching
 //配置类==配置文件
@@ -51,10 +54,14 @@ import java.util.Arrays;
 @Import({Person.class, TestImportSelect.class, TestImportBeanDefinitionRegistrar.class})
 public class ApplicationConfig {
 
+	@Value("${name}")
+	private String name;
+
 	@Bean("cacheManager")
 	public SimpleCacheManager cacheManager(){
 		SimpleCacheManager simpleCacheManager = new SimpleCacheManager();
 		simpleCacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("test")));
+		System.out.println("-------name:"+name);
 		return simpleCacheManager;
 	}
 

@@ -2,6 +2,7 @@ package com.learn.bean;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -12,6 +13,15 @@ import javax.annotation.PreDestroy;
  * @Description:
  */
 public class Car implements InitializingBean, DisposableBean {
+
+	/**
+	 * @Value使用
+	 * 1. 直接写数值
+	 * 2. 可以用springel表达式，#{}
+	 * 3. 可以用环境变量中的是，${}
+	 */
+	@Value("test.name")
+	private String name;
 
 	public Car() {
 		System.out.println("----构造函数");
