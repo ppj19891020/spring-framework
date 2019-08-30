@@ -8,7 +8,6 @@ import com.learn.conditional.TestImportBeanDefinitionRegistrar;
 import com.learn.conditional.TestImportSelect;
 import com.learn.services.CacheService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
@@ -23,6 +22,10 @@ import java.util.Arrays;
  * @Description:
  */
 
+/**
+ * 动态激活和切换组件
+ */
+@Profile("")
 @PropertySource(value = {"classpath:/test.properties"})
 //spring 缓存配置
 @EnableCaching
