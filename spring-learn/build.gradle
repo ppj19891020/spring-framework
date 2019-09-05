@@ -17,5 +17,7 @@ dependencies {
     compile(project(":spring-core-coroutines"))
     compile(project(":spring-context"))
     compile(project(":spring-instrument"))
+    compile(project(":spring-aop"))
+    compile(project(":spring-aspects"))
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
