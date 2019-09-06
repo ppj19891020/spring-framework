@@ -12,7 +12,7 @@ public class AopApplication {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(AopApplicationConfig.class);
 		MathService mathService = annotationConfigApplicationContext.getBean(MathService.class);
-		mathService.div(1,1);
+		Integer i = mathService.div(21,1);
 		annotationConfigApplicationContext.close();
 	}
 }

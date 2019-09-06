@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MathService {
 
-	public int div(int a,int b){
+	public Integer div(int a,int b){
 		return a/b;
 	}
 }

@@ -16,7 +16,7 @@ public class LogAspect {
 	/**
 	 * 切面方法
 	 */
-	@Pointcut(value = "execution(public int com.learn.services.MathService.*(...)")
+	@Pointcut("execution(public * com.learn.services.MathService..*(..))")
 	public void pointcut(){};
 
 	/**
@@ -56,10 +56,11 @@ public class LogAspect {
 	 * 环绕通知
 	 */
 	@Around(value = "pointcut()")
-	public void logAround(ProceedingJoinPoint proceedingJoinPoint)throws Throwable{
+	public Object logAround(ProceedingJoinPoint proceedingJoinPoint)throws Throwable{
 		System.out.println("logAround1");
-		proceedingJoinPoint.proceed();
+		Object result = proceedingJoinPoint.proceed();
 		System.out.println("logAround2");
+		return result;
 	}
 
 }
