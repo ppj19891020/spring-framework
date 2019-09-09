@@ -21,6 +21,22 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * 5. 切面类使用@Aspect注解
  * 6. 开启基于注解版的切面功能@EnableAspectJAutoProxy(
  *
+ * AOP 原理：
+ *	1. @EnableAspectJAutoProxy()是什么？
+ * 		@Import(AspectJAutoProxyRegistrar.class) 给容器导入AspectJAutoProxyRegistrar
+ * 			利用AspectJAutoProxyRegistrar给容器注册，通过实现 ImportBeanDefinitionRegistrar 导入bean
+ * 				注册bean AnnotationAwareAspectJAutoProxyCreator bean名为internalAutoProxyCreator
+ * 2. AnnotationAwareAspectJAutoProxyCreator
+ * 		-> AspectJAwareAdvisorAutoProxyCreator
+ * 			-> AbstractAdvisorAutoProxyCreator
+ * 				-> 	AbstractAutoProxyCreator
+ * 					implements SmartInstantiationAwareBeanPostProcessor, BeanFactoryAware
+ * 						-> InstantiationAwareBeanPostProcessor
+ * 							-> BeanPostProcessor
+ * 								BeanPostProcessor 初始化前后做事情
+ * 								BeanFactoryAware 自定装配beanfactory
+ *
+ *
  * @author: peijiepang
  * @date 2019-09-05
  * @Description:
