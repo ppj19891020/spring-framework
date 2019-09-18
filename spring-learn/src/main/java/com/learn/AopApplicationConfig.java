@@ -75,6 +75,38 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * BeanPostprocessor:在bean对象初始化前后调用；
  * InstantiationAwareBeanPostProcessor：是在bean实例化之前尝试后置处理器返回代理对象；
  *
+ * 目标方法的执行：
+ *	容器中保存组件的代理对象（cglib对象），这里保存里代理对象的增强器
+ *     1. CglibAopProxy.intercept方法，拦截目标方法
+ *     2. 获取目标方法拦截器链 this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
+ *     		2.1 获取拦截器链 DefaultAdvisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice
+ *     		2.2 新建 List<Object> interceptorList = new ArrayList<>(advisors.length);
+ *     		2.3 遍历所有的增强器，将其转化为interceptor  registry.getInterceptors(advisor);
+ *     			2.3.1 如果是MethodInterceptor，直接加入到集合中
+ *     			2.3.2 如果不是，则通过适配器AdvisorAdapter，转化成methodinterceptor
+ *     						 methodbeforeAdviceAdapter：前置通知
+ *     						 afterreturningadviceAdapter:后置通知
+ *     						 throwadviceadaoter：异常通知ß
+ *     3. 如果没有获取到链，则直接执行目标对象的目标方法
+ *     4. 如果有拦截器链，则创建 method invocation对象，调用proceed方法，retVal = new CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).proceed();
+ *     		4.1 如果没有拦截器，则直接执行；this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1；currentInterceptorIndex为当前的索引-1
+ *     		4.2 链式获取每一个拦截器，拦截器执行invoke方法，每一个拦截器等待下一个拦截器执行返回完成后再执行，拦截器机制保证通知方法和执行顺序一致；
+ *
+ *     5. 组装返回类型 processReturnType(proxy, target, method, retVal);
+ *
+ * AOP总结：
+ * 	1. 开启注解@EnableAspectJAutoProxy()，给容器注册一个AnnotationAwareAspectJAutoProxyCreator；
+ * 	2. AnnotationAwareAspectJAutoProxyCreator是一个后置处理器；
+ * 	3. 容器的创建过程
+ * 		3.1 注册后置处理器 registerBeanPostProcessors
+ * 		3.2 初始化剩下的单实例bean finishBeanFactoryInitialization
+ * 				3.2.1 创建业务组件和切面组件
+ * 				3.2.2 后置处理器拦截bena AnnotationAwareAspectJAutoProxyCreator
+ * 				3.2.3 组件创建完成之后，判断组件是否需要增强，将增强器转换为method intercept，创建代理对象
+ * 		3.3 执行目标方法
+ * 			3.3.1 获取拦截器链 CglibAopProxy.intercept方法，拦截目标方法
+ * 			3.3.2 利用拦截器的链式机制，依次进入拦截器依次执行
+ * 			3.3.3 顺序：前置通知 -->  目标方法  --->  后置通知  ---> 返回通知/异常通知
  *
  * @author: peijiepang
  * @date 2019-09-05
