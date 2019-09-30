@@ -16,7 +16,7 @@ public class LogAspect {
 	/**
 	 * 切面方法
 	 */
-	@Pointcut("execution(public * com.learn.services.MathService..*(..))")
+	@Pointcut("execution(public * com.learn.services.MathService.*(..))")
 	public void pointcut(){};
 
 	/**

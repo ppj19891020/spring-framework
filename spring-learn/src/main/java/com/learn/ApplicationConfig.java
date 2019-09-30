@@ -25,7 +25,6 @@ import java.util.Arrays;
 /**
  * 动态激活和切换组件
  */
-@Profile("")
 @PropertySource(value = {"classpath:/test.properties"})
 //spring 缓存配置
 @EnableCaching
