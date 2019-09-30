@@ -345,6 +345,27 @@ public interface BeanFactory {
 	Class<?> getType(String name) throws NoSuchBeanDefinitionException;
 
 	/**
+	 * Determine the type of the bean with the given name. More specifically,
+	 * determine the type of object that {@link #getBean} would return for the given name.
+	 * <p>For a {@link FactoryBean}, return the type of object that the FactoryBean creates,
+	 * as exposed by {@link FactoryBean#getObjectType()}. Depending on the
+	 * {@code allowFactoryBeanInit} flag, this may lead to the initialization of a previously
+	 * uninitialized {@code FactoryBean} if no early type information is available.
+	 * <p>Translates aliases back to the corresponding canonical bean name.
+	 * Will ask the parent factory if the bean cannot be found in this factory instance.
+	 * @param name the name of the bean to query
+	 * @param allowFactoryBeanInit whether a {@code FactoryBean} may get initialized
+	 * just for the purpose of determining its object type
+	 * @return the type of the bean, or {@code null} if not determinable
+	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
+	 * @since 5.2
+	 * @see #getBean
+	 * @see #isTypeMatch
+	 */
+	@Nullable
+	Class<?> getType(String name, boolean allowFactoryBeanInit) throws NoSuchBeanDefinitionException;
+
+	/**
 	 * 得到 bean 的别名，如果根据别名检索，那么其原名也会被检索出来
 	 * Return the aliases for the given bean name, if any.
 	 * All of those aliases point to the same bean when used in a {@link #getBean} call.
